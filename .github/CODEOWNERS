@@ -1,0 +1,26 @@
+# Code Owners for PortfolioAR
+# These owners will be automatically requested for review
+# when someone opens a pull request.
+
+# Default owners for everything in the repo
+* @tu-usuario
+
+# Core module
+/core/ @tu-usuario
+
+# Portfolio module
+/portfolio/ @tu-usuario
+
+# Alerts module
+/alerts/ @tu-usuario
+
+# Templates
+/templates/ @tu-usuario
+
+# Configuration
+/portfolioar/ @tu-usuario
+
+# Docker and CI
+/Dockerfile @tu-usuario
+/docker-compose.yml @tu-usuario
+/.github/ @tu-usuario

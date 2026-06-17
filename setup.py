@@ -1,0 +1,48 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="portfolioar",
+    version="0.1.0",
+    description="Sistema de gestión de inversiones para inversores argentinos",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    author="Tu Nombre",
+    author_email="tu@email.com",
+    url="https://github.com/tu-usuario/portfolioar",
+    packages=find_packages(),
+    include_package_data=True,
+    python_requires=">=3.8",
+    install_requires=[
+        "Django>=4.2,<5.0",
+        "mssql-django>=1.3",
+        "python-dotenv>=1.0",
+        "pandas>=2.0",
+        "pandas-ta>=0.3",
+        "langchain>=0.1",
+        "openai>=1.0",
+        "requests>=2.31",
+        "python-decouple>=3.8",
+    ],
+    extras_require={
+        "dev": [
+            "pytest",
+            "pytest-django",
+            "flake8",
+            "black",
+            "isort",
+            "mypy",
+            "django-stubs",
+        ],
+    },
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+    ],
+)
