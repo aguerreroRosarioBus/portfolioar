@@ -79,8 +79,9 @@ class PortfolioManager:
         delete_position(position_id)
 
     def calculate_position_performance(self, position):
-        invested_amount = position.amount * position.stock_price_usd
-        current_price_usd = self.external_apis.get_current_price(position.stock.ticker) or position.stock_price_usd
+        buy_price = Decimal(str(position.stock_price_usd))
+        invested_amount = position.amount * buy_price
+        current_price_usd = self.external_apis.get_current_price(position.stock.ticker) or buy_price
         current_value = position.amount * current_price_usd
 
         profit_loss = current_value - invested_amount
@@ -180,14 +181,15 @@ class PortfolioManager:
         }
 
     def get_technical_indicators(self, position):
+        price = Decimal(str(position.stock_price_usd))
         return {
             'rsi': Decimal('65.5'),
             'macd': Decimal('2.35'),
             'macd_signal': Decimal('1.89'),
             'macd_histogram': Decimal('0.46'),
-            'sma_20': position.stock_price_usd * Decimal('0.98'),
-            'sma_50': position.stock_price_usd * Decimal('0.95'),
-            'ema_30': position.stock_price_usd * Decimal('0.97'),
+            'sma_20': price * Decimal('0.98'),
+            'sma_50': price * Decimal('0.95'),
+            'ema_30': price * Decimal('0.97'),
             'volume_relative': Decimal('1.2'),
             'volatility': Decimal('18.5')
         }

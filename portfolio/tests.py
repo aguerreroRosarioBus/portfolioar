@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.test import TestCase
 
 from core.models import User, Sector, Broker, Stock
@@ -27,7 +29,7 @@ class PositionModelTest(TestCase):
             amount=10,
             stock_price_local=15000.00,
             stock_price_usd=150.00,
-            purchased_at='2024-01-01'
+            purchased_at=datetime(2024, 1, 1)
         )
 
     def test_position_creation(self):
@@ -64,12 +66,12 @@ class OrderModelTest(TestCase):
             amount=10,
             stock_price_local=15000.00,
             stock_price_usd=150.00,
-            purchased_at='2024-01-01'
+            purchased_at=datetime(2024, 1, 1)
         )
         self.order = Order.objects.create(
             position=self.position,
             amount=5,
-            fulfill_datetime='2024-01-15',
+            fulfill_datetime=datetime(2024, 1, 15),
             total_fees=100.00,
             price_local=16000.00,
             price_usd=160.00
@@ -110,7 +112,7 @@ class PortfolioManagerTest(TestCase):
             amount=10,
             stock_price_local=15000.00,
             stock_price_usd=150.00,
-            purchased_at='2024-01-01'
+            purchased_at=datetime(2024, 1, 1)
         )
 
     def test_calculate_position_performance(self):
