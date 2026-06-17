@@ -44,7 +44,7 @@ def position_list(request):
 @login_required
 def position_detail(request, position_id):
     portfolio_manager = PortfolioManager()
-    position = portfolio_manager.get_position(position_id)
+    position = portfolio_manager.get_position(position_id, request.user.id)
     performance = portfolio_manager.calculate_position_performance(position)
     sp500_comparison = portfolio_manager.compare_with_sp500(position)
     inflation_comparison = portfolio_manager.compare_with_inflation(position)
@@ -99,7 +99,7 @@ def position_create(request):
 @login_required
 def position_update(request, position_id):
     portfolio_manager = PortfolioManager()
-    position = portfolio_manager.get_position(position_id)
+    position = portfolio_manager.get_position(position_id, request.user.id)
     
     if request.method == 'POST':
         amount = int(request.POST.get('amount', 0))
@@ -121,12 +121,16 @@ def position_update(request, position_id):
 @login_required
 def position_delete(request, position_id):
     portfolio_manager = PortfolioManager()
+    portfolio_manager.get_position(position_id, request.user.id)
     portfolio_manager.remove_position(position_id)
     return redirect('portfolio:position_list')
 
 
 @login_required
 def order_create(request, position_id):
+    portfolio_manager = PortfolioManager()
+    portfolio_manager.get_position(position_id, request.user.id)
+
     if request.method == 'POST':
         amount = int(request.POST.get('amount', 0))
         fulfill_datetime = request.POST.get('fulfill_datetime')
@@ -150,5 +154,6 @@ def order_create(request, position_id):
 @login_required
 def order_delete(request, order_id):
     order_manager = OrderManager()
+    order_manager.get_order(order_id, request.user.id)
     order_manager.remove_order(order_id)
     return redirect('portfolio:position_list')

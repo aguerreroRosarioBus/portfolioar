@@ -4,7 +4,7 @@ import requests
 from .data_access import (
     get_positions_by_user, get_position_by_id, create_position,
     update_position, delete_position, get_orders_by_position,
-    create_order, delete_order
+    get_order_by_id, create_order, delete_order
 )
 
 
@@ -48,8 +48,8 @@ class PortfolioManager:
     def get_user_positions(self, user_id):
         return get_positions_by_user(user_id)
 
-    def get_position(self, position_id):
-        return get_position_by_id(position_id)
+    def get_position(self, position_id, user_id=None):
+        return get_position_by_id(position_id, user_id)
 
     def add_position(self, user_id, stock_id, broker_id, amount, stock_price_local, stock_price_usd, purchased_at):
         if amount <= 0:
@@ -191,6 +191,9 @@ class PortfolioManager:
 class OrderManager:
     def get_position_orders(self, position_id):
         return get_orders_by_position(position_id)
+
+    def get_order(self, order_id, user_id=None):
+        return get_order_by_id(order_id, user_id)
 
     def add_order(self, position_id, amount, fulfill_datetime, total_fees, price_local, price_usd):
         if amount <= 0:

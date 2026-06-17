@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+
 from .models import Position, Order
 from core.data_access import get_user_by_id, get_stock_by_id, get_broker_by_id
 
@@ -6,8 +8,10 @@ def get_positions_by_user(user_id):
     return Position.objects.filter(user_id=user_id)
 
 
-def get_position_by_id(position_id):
-    return Position.objects.get(id=position_id)
+def get_position_by_id(position_id, user_id=None):
+    if user_id is not None:
+        return get_object_or_404(Position, id=position_id, user_id=user_id)
+    return get_object_or_404(Position, id=position_id)
 
 
 def create_position(user_id, stock_id, broker_id, amount, stock_price_local, stock_price_usd, purchased_at):
@@ -65,6 +69,12 @@ def create_order(position_id, amount, fulfill_datetime, total_fees, price_local,
     )
     order.save()
     return order
+
+
+def get_order_by_id(order_id, user_id=None):
+    if user_id is not None:
+        return get_object_or_404(Order, id=order_id, position__user_id=user_id)
+    return get_object_or_404(Order, id=order_id)
 
 
 def delete_order(order_id):
