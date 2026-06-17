@@ -32,9 +32,8 @@ db.sqlite3
 db.sqlite3-journal
 media/
 
-# Static files
+# Static files (staticfiles/ es el output de collectstatic, static/ es la fuente)
 staticfiles/
-static/
 
 # Environment variables
 .env
