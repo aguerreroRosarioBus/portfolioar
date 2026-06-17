@@ -3,7 +3,8 @@ from .data_access import (
     authenticate_user, login_user, logout_user,
     get_all_sectors, get_sector_by_id, create_sector,
     get_all_brokers, get_broker_by_id, create_broker,
-    get_all_stocks, get_stock_by_id, get_stock_by_ticker, create_stock
+    get_all_stocks, get_stock_by_id, get_stock_by_ticker, create_stock,
+    get_stock_by_sector
 )
 
 
