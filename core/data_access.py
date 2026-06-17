@@ -29,7 +29,10 @@ def create_user(first_name, last_name, email, password, phone=None, birthdate=No
 
 
 def authenticate_user(email, password):
-    return authenticate(username=email, password=password)
+    user = User.objects.filter(email=email).first()
+    if user is not None and user.check_password(password):
+        return user
+    return None
 
 
 def login_user(request, user):
