@@ -41,8 +41,8 @@ class AlertManager:
     def get_user_alerts(self, user_id):
         return get_alerts_by_user(user_id)
     
-    def get_alert(self, alert_id):
-        return get_alert_by_id(alert_id)
+    def get_alert(self, alert_id, user_id=None):
+        return get_alert_by_id(alert_id, user_id)
     
     def create_alert(self, user_id, stock_id, name, is_active=True):
         if not name:

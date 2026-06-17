@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+
 from .models import TechnicalIndicator, AlertCondition, Alert, AlertTrigger
 from core.data_access import get_user_by_id, get_stock_by_id
 
@@ -35,8 +37,10 @@ def get_alerts_by_user(user_id):
     return Alert.objects.filter(user_id=user_id)
 
 
-def get_alert_by_id(alert_id):
-    return Alert.objects.get(id=alert_id)
+def get_alert_by_id(alert_id, user_id=None):
+    if user_id is not None:
+        return get_object_or_404(Alert, id=alert_id, user_id=user_id)
+    return get_object_or_404(Alert, id=alert_id)
 
 
 def create_alert(user_id, stock_id, name, is_active=True):

@@ -15,7 +15,7 @@ def alert_list(request):
 @login_required
 def alert_detail(request, alert_id):
     alert_manager = AlertManager()
-    alert = alert_manager.get_alert(alert_id)
+    alert = alert_manager.get_alert(alert_id, request.user.id)
     
     return render(request, 'alerts/alert_detail.html', {'alert': alert})
 
@@ -55,7 +55,7 @@ def alert_create(request):
 @login_required
 def alert_update(request, alert_id):
     alert_manager = AlertManager()
-    alert = alert_manager.get_alert(alert_id)
+    alert = alert_manager.get_alert(alert_id, request.user.id)
     
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -76,6 +76,7 @@ def alert_update(request, alert_id):
 @login_required
 def alert_delete(request, alert_id):
     alert_manager = AlertManager()
+    alert_manager.get_alert(alert_id, request.user.id)
     alert_manager.delete_alert(alert_id)
     return redirect('alerts:alert_list')
 
@@ -84,17 +85,19 @@ def alert_delete(request, alert_id):
 def alert_add_condition(request, alert_id):
     if request.method == 'POST':
         condition_id = request.POST.get('condition_id')
-        
+
         alert_manager = AlertManager()
+        alert_manager.get_alert(alert_id, request.user.id)
         alert_manager.add_condition(alert_id, condition_id)
         return redirect('alerts:alert_detail', alert_id=alert_id)
-    
+
     return redirect('alerts:alert_detail', alert_id=alert_id)
 
 
 @login_required
 def alert_remove_condition(request, alert_id, condition_id):
     alert_manager = AlertManager()
+    alert_manager.get_alert(alert_id, request.user.id)
     alert_manager.remove_condition(alert_id, condition_id)
     return redirect('alerts:alert_detail', alert_id=alert_id)
 
