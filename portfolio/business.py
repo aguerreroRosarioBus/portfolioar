@@ -15,13 +15,19 @@ class ExternalAPIs:
             url = "https://apis.datos.gob.ar/series/api/series/"
             params = {
                 'ids': '148.3_INIVELNAL_DICI_M_26',
+                'start_date': start_date.strftime('%Y-%m'),
+                'end_date': end_date.strftime('%Y-%m'),
                 'format': 'json'
             }
             response = requests.get(url, params=params, timeout=10)
             if response.status_code == 200:
                 data = response.json()
-                if 'data' in data and len(data['data']) > 0:
-                    return Decimal(str(data['data'][0][1]))
+                series = data.get('data', [])
+                if len(series) >= 2:
+                    start_index = Decimal(str(series[0][1]))
+                    end_index = Decimal(str(series[-1][1]))
+                    if start_index > 0:
+                        return (end_index / start_index - 1) * 100
             return Decimal('0')
         except Exception:
             return Decimal('0')
@@ -74,7 +80,7 @@ class PortfolioManager:
 
     def calculate_position_performance(self, position):
         invested_amount = position.amount * position.stock_price_usd
-        current_price_usd = position.stock_price_usd
+        current_price_usd = self.external_apis.get_current_price(position.stock.ticker) or position.stock_price_usd
         current_value = position.amount * current_price_usd
 
         profit_loss = current_value - invested_amount
@@ -134,10 +140,9 @@ class PortfolioManager:
         total_current_value = Decimal('0')
 
         for position in positions:
-            invested = position.amount * position.stock_price_local
-            current = position.amount * position.stock_price_usd
-            total_invested += invested
-            total_current_value += current
+            current_price = self.external_apis.get_current_price(position.stock.ticker) or position.stock_price_usd
+            total_invested += position.amount * position.stock_price_usd
+            total_current_value += position.amount * current_price
 
         profit_loss = total_current_value - total_invested
         profit_loss_percentage = (profit_loss / total_invested * 100) if total_invested > 0 else Decimal('0')
