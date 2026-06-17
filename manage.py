@@ -2,10 +2,20 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from pathlib import Path
 
 
 def main():
     """Run administrative tasks."""
+    # Carga variables del .env si existe
+    env_file = Path(__file__).resolve().parent / '.env'
+    if env_file.exists():
+        try:
+            from dotenv import load_dotenv
+            load_dotenv(env_file)
+        except ImportError:
+            pass
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'portfolioar.settings')
     try:
         from django.core.management import execute_from_command_line
