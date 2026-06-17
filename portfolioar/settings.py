@@ -9,6 +9,10 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',')
 
+AUTH_USER_MODEL = 'core.User'
+
+USE_SQLITE = os.environ.get('USE_SQLITE') == 'True'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -16,11 +20,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mssql',
     'core',
     'portfolio',
     'alerts',
 ]
+
+if not USE_SQLITE:
+    INSTALLED_APPS.insert(6, 'mssql')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,20 +58,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolioar.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': os.environ.get('DB_NAME', 'portfolioar_db'),
-        'USER': os.environ.get('DB_USER', 'sa'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '1433'),
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-            'unicode_results': True,
+if USE_SQLITE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'mssql',
+            'NAME': os.environ.get('DB_NAME', 'portfolioar_db'),
+            'USER': os.environ.get('DB_USER', 'sa'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': os.environ.get('DB_HOST', 'localhost'),
+            'PORT': os.environ.get('DB_PORT', '1433'),
+            'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+                'unicode_results': True,
+            },
         },
-    },
-}
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
