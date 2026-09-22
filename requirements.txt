@@ -4,6 +4,6 @@ python-dotenv>=1.0
 pandas>=2.0
 pandas-ta>=0.3
 langchain>=0.1
-openai>=1.0
+openai>=3.16.2
 requests>=2.31
 python-decouple>=3.8
